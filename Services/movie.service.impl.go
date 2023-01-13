@@ -62,8 +62,27 @@ func (u *MovieServiceImpl) GetAll() ([]*models.Movie, error) {
 	return movies, nil
 }
 
-func (u *MovieServiceImpl) UpdateMovie(movie *models.Movie) error {
+func (u *MovieServiceImpl) LikeTheMovie(movie *models.Movie) error {
 	filter := bson.D{primitive.E{Key: "id", Value: movie.id}}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "likes", ++}}}}
+	result, _ := u.moviecollection.UpdateOne(u.ctx, filter, update)
+	if result.MatchedCount != 1 {
+		return errors.New("no matched movie found")
+	}
+	return nil
+}
+func (u *MovieServiceImpl) CommentOnMovie(movie *models.Movie) error {
+	filter := bson.D{primitive.E{Key: "id", Value: movie.id}}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "comments", Value: movie.comments}}}}
+	result, _ := u.moviecollection.UpdateOne(u.ctx, filter, update)
+	if result.MatchedCount != 1 {
+		return errors.New("no matched movie found")
+	}
+	return nil
+}
+
+func (u *MovieServiceImpl) UpdateMovie(movie *models.Movie) error {
+	filter := bson.D{primitive.E{Key: "name", Value: movie.Name}}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "name", Value: movie.Name}, primitive.E{Key: "banner", Value: movie.Banner}, primitive.E{Key: "cast", Value: movie.Cast}}}}
 	result, _ := u.moviecollection.UpdateOne(u.ctx, filter, update)
 	if result.MatchedCount != 1 {
@@ -72,11 +91,18 @@ func (u *MovieServiceImpl) UpdateMovie(movie *models.Movie) error {
 	return nil
 }
 
-func (u *MovieServiceImpl) DeleteMovie(id *int) error {
-	filter := bson.D{primitive.E{Key: "id", Value: id}}
+func (u *MovieServiceImpl) DeleteMovie(name *string) error {
+	filter := bson.D{primitive.E{Key: "name", Value: name}}
 	result, _ := u.moviecollection.DeleteOne(u.ctx, filter)
 	if result.DeletedCount != 1 {
 		return errors.New("no matched movie found for delete")
 	}
 	return nil
 }
+
+
+
+
+
+
+

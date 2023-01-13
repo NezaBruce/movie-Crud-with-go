@@ -50,6 +50,32 @@ func (uc *MovieController) GetAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, movies)
 }
 
+func (uc *MovieController) CommentOnMovie(ctx *gin.Context) {
+	var movie models.Movie
+	if err := ctx.ShouldBindJSON(&movie); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	err := uc.MovieService.CommentOnMovie(&movie)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+func (uc *MovieController) LikeTheMovie(ctx *gin.Context) {
+	var movie models.Movie
+	if err := ctx.ShouldBindJSON(&movie); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	err := uc.MovieService.LikeTheMovie(&movie)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
 func (uc *MovieController) UpdateMovie(ctx *gin.Context) {
 	var movie models.Movie
 	if err := ctx.ShouldBindJSON(&movie); err != nil {
@@ -65,8 +91,8 @@ func (uc *MovieController) UpdateMovie(ctx *gin.Context) {
 }
 
 func (uc *MovieController) DeleteMovie(ctx *gin.Context) {
-	var movieid string = ctx.Param("id")
-	err := uc.MovieService.DeleteMovie(&movieid)
+	var moviename string = ctx.Param("name")
+	err := uc.MovieService.DeleteMovie(&moviename)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -79,6 +105,8 @@ func (uc *MovieController) RegisterMovieRoutes(rg *gin.RouterGroup) {
 	movieroute.POST("/create", uc.CreateMovie)
 	movieroute.GET("/get/:name", uc.GetMovie)
 	movieroute.GET("/getall", uc.GetAll)
+	movieroute.PATCH("/:id/like", uc.LikeTheMovie)
+	movieroute.PATCH("/:id/comment", uc.CommentOnMovie)
 	movieroute.PATCH("/update/:id", uc.UpdateMovie)
 	movieroute.DELETE("/delete/:id", uc.DeleteMovie)
 }

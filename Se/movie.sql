@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS movies (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  userid bigint(20) DEFAULT NULL,
+  title varchar(280) DEFAULT '',
+  filename varchar(280) DEFAULT '',
+  md5 varchar(64) DEFAULT '',
+  url varchar(280) DEFAULT '',
+  cover varchar(280) DEFAULT '',
+  cover2 varchar(280) DEFAULT '',
+  desc varchar(1000) DEFAULT '',
+  duration bigint(20) DEFAULT '0',
+  num tinyint(4) DEFAULT '1',
+  status tinyint(4) DEFAULT '0',
+  views bigint(20) DEFAULT '0',
+  comments bigint(20) DEFAULT '0',
+  likes bigint(20) DEFAULT '0',
+  created_at bigint(20) DEFAULT '0',
+  updated_at bigint(20) DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
