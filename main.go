@@ -51,6 +51,6 @@ func main() {
 	basepath := server.Group("/v1")
 	uc.RegisterMovieRoutes(basepath)
 
-	log.Fatal(server.Run(":9090"))
+	log.Fatal(server.Run(":7000"))
 
 }
