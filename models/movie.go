@@ -6,8 +6,10 @@ type Cast struct {
 }
 
 type Movie struct {
-	Id     int     `json:"id" bson:"id"` 
-	Name    string  `json:"name" bson:"name"`
+	Id         int        `json:"id" bson:"id"` 
+	Name       string     `json:"name" bson:"name"`
 	Banner     string     `json:"banner" bson:"banner"`
-	Cast Cast `json:"address" bson:"address"`
+	year       int        `json:"year" bson:"year"`
+	Cast       Cast       `json:"Cast" bson:"Cast"`
+	ratings    int        `json:"ratings" bson:"ratings"`
 }
